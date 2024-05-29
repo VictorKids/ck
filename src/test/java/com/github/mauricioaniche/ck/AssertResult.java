@@ -2,10 +2,8 @@ package com.github.mauricioaniche.ck;
 
 import org.junit.jupiter.api.Assertions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 

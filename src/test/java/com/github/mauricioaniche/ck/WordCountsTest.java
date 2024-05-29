@@ -2,7 +2,6 @@ package com.github.mauricioaniche.ck;
 
 import org.junit.jupiter.api.*;
 
-import java.util.Map;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class WordCountsTest extends BaseTest {

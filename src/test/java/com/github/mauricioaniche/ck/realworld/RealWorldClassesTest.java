@@ -3,7 +3,6 @@ package com.github.mauricioaniche.ck.realworld;
 import com.github.mauricioaniche.ck.BaseTest;
 import com.github.mauricioaniche.ck.CKClassResult;
 import com.github.mauricioaniche.ck.CKMethodResult;
-import com.github.mauricioaniche.ck.metric.MethodLevelMetric;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
