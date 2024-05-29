@@ -1,20 +1,21 @@
 package com.github.mauricioaniche.ck;
 
-import com.google.common.collect.Sets;
+import java.util.HashMap;
+import java.util.Set;
+
 import org.apache.commons.lang3.ArrayUtils;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.HashMap;
-import java.util.Set;
+import com.google.common.collect.Sets;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MethodInvocationsTest extends BaseTest {
     private String qualifier = "MethodInvocation.Complex1.";
-
+    static private String javaLang1 = "m3/1[java.lang.String]";
+    static private String javaLang2 = "m4/2[java.lang.String,int]";
     @BeforeAll
     public void setUp() {
         report = run(fixturesDir() + "/MethodInvocation");
@@ -31,15 +32,15 @@ public class MethodInvocationsTest extends BaseTest {
 
         CKMethodResult m2 = ckClass.getMethod("m2/1[int]").get();
         assertEquals(
-                Sets.newHashSet(qualifier + "m3/1[java.lang.String]", "MethodInvocation.GO2.magic/0"),
+                Sets.newHashSet(qualifier + javaLang1, "MethodInvocation.GO2.magic/0"),
                 m2.getMethodInvocations());
 
-        CKMethodResult m3 = ckClass.getMethod("m3/1[java.lang.String]").get();
+        CKMethodResult m3 = ckClass.getMethod(javaLang1).get();
         assertEquals(
-                Sets.newHashSet("java.io.PrintStream.println/1[int]", qualifier + "m4/2[java.lang.String,int]"),
+                Sets.newHashSet("java.io.PrintStream.println/1[int]", qualifier + javaLang2),
                 m3.getMethodInvocations());
 
-        CKMethodResult m4 = ckClass.getMethod("m4/2[java.lang.String,int]").get();
+        CKMethodResult m4 = ckClass.getMethod(javaLang2).get();
         assertEquals(
                 Sets.newHashSet("MethodInvocation.Simple2.x/0", qualifier + "m2/1[int]"),
                 m4.getMethodInvocations());
@@ -59,7 +60,7 @@ public class MethodInvocationsTest extends BaseTest {
         CKClassResult ckClass = report.get("MethodInvocation.Complex1");
         CKMethodResult m6 = ckClass.getMethod("m6/0").get();
         assertEquals(
-                Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"),
+                Sets.newHashSet(qualifier + javaLang2),
                 m6.getMethodInvocations());
     }
 
@@ -82,7 +83,7 @@ public class MethodInvocationsTest extends BaseTest {
                         "MethodInvocation.Simple2.x/0",
                         "java.util.stream.Collectors.toList/0",
                         "java.util.stream.Stream<java.lang.Integer>.collect/1[java.util.stream.Collector<? super java.lang.Integer,java.lang.Object,java.util.List<java.lang.Integer>>]",
-                        qualifier + "m4/2[java.lang.String,int]"),
+                        qualifier + javaLang2),
                 m8.getMethodInvocations());
     }
 
@@ -106,15 +107,15 @@ public class MethodInvocationsTest extends BaseTest {
 
         CKMethodResult m2 = ckClass.getMethod("m2/1[int]").get();
         assertEquals(
-                Sets.newHashSet(qualifier + "m3/1[java.lang.String]"),
+                Sets.newHashSet(qualifier + javaLang1),
                 m2.getMethodInvocationsLocal());
 
-        CKMethodResult m3 = ckClass.getMethod("m3/1[java.lang.String]").get();
+        CKMethodResult m3 = ckClass.getMethod(javaLang1).get();
         assertEquals(
-                Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"),
+                Sets.newHashSet(qualifier + javaLang2),
                 m3.getMethodInvocationsLocal());
 
-        CKMethodResult m4 = ckClass.getMethod("m4/2[java.lang.String,int]").get();
+        CKMethodResult m4 = ckClass.getMethod(javaLang2).get();
         assertEquals(
                 Sets.newHashSet(qualifier + "m2/1[int]"),
                 m4.getMethodInvocationsLocal());
@@ -134,7 +135,7 @@ public class MethodInvocationsTest extends BaseTest {
         CKClassResult ckClass = report.get("MethodInvocation.Complex1");
         CKMethodResult m6 = ckClass.getMethod("m6/0").get();
         assertEquals(
-                Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"),
+                Sets.newHashSet(qualifier + javaLang2),
                 m6.getMethodInvocationsLocal());
     }
 
@@ -152,7 +153,7 @@ public class MethodInvocationsTest extends BaseTest {
         CKClassResult ckClass = report.get("MethodInvocation.Complex1");
         CKMethodResult m8 = ckClass.getMethod("m8/0").get();
         assertEquals(
-                Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"),
+                Sets.newHashSet(qualifier + javaLang2),
                 m8.getMethodInvocationsLocal());
     }
 
@@ -173,26 +174,26 @@ public class MethodInvocationsTest extends BaseTest {
 
         HashMap<String, Set<String>> invocations1 = new HashMap<>();
         invocations1.put(qualifier + "m1/0", Sets.newHashSet(qualifier + "m2/1[int]"));
-        invocations1.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + "m3/1[java.lang.String]"));
-        invocations1.put(qualifier + "m3/1[java.lang.String]", Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"));
+        invocations1.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + javaLang1));
+        invocations1.put(qualifier + javaLang1, Sets.newHashSet(qualifier + javaLang2));
         assertEquals(invocations1, m1.getMethodInvocationsIndirectLocal());
 
         CKMethodResult m2 = ckClass.getMethod("m2/1[int]").get();
         HashMap<String, Set<String>> invocations2 = new HashMap<>();
-        invocations2.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + "m3/1[java.lang.String]"));
-        invocations2.put(qualifier + "m3/1[java.lang.String]", Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"));
+        invocations2.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + javaLang1));
+        invocations2.put(qualifier + javaLang1, Sets.newHashSet(qualifier + javaLang2));
         assertEquals(invocations2, m2.getMethodInvocationsIndirectLocal());
 
         HashMap<String, Set<String>> invocations3 = new HashMap<>();
-        invocations3.put(qualifier + "m3/1[java.lang.String]", Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"));
-        invocations3.put(qualifier + "m4/2[java.lang.String,int]", Sets.newHashSet(qualifier + "m2/1[int]"));
-        CKMethodResult m3 = ckClass.getMethod("m3/1[java.lang.String]").get();
+        invocations3.put(qualifier + javaLang1, Sets.newHashSet(qualifier + javaLang2));
+        invocations3.put(qualifier + javaLang2, Sets.newHashSet(qualifier + "m2/1[int]"));
+        CKMethodResult m3 = ckClass.getMethod(javaLang1).get();
         assertEquals(invocations3, m3.getMethodInvocationsIndirectLocal());
 
         HashMap<String, Set<String>> invocations4 = new HashMap<>();
-        invocations4.put(qualifier + "m4/2[java.lang.String,int]", Sets.newHashSet(qualifier + "m2/1[int]"));
-        invocations4.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + "m3/1[java.lang.String]"));
-        CKMethodResult m4 = ckClass.getMethod("m4/2[java.lang.String,int]").get();
+        invocations4.put(qualifier + javaLang2, Sets.newHashSet(qualifier + "m2/1[int]"));
+        invocations4.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + javaLang1));
+        CKMethodResult m4 = ckClass.getMethod(javaLang2).get();
         assertEquals(invocations4, m4.getMethodInvocationsIndirectLocal());
     }
 
@@ -201,8 +202,8 @@ public class MethodInvocationsTest extends BaseTest {
         CKClassResult ckClass = report.get("MethodInvocation.Complex1");
         HashMap<String, Set<String>> invocations5 = new HashMap<>();
         invocations5.put(qualifier + "m5/0", Sets.newHashSet(qualifier + "m2/1[int]"));
-        invocations5.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + "m3/1[java.lang.String]"));
-        invocations5.put(qualifier + "m3/1[java.lang.String]", Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"));
+        invocations5.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + javaLang1));
+        invocations5.put(qualifier + javaLang1, Sets.newHashSet(qualifier + javaLang2));
         CKMethodResult m5 = ckClass.getMethod("m5/0").get();
         assertEquals(invocations5, m5.getMethodInvocationsIndirectLocal());
     }
@@ -211,9 +212,9 @@ public class MethodInvocationsTest extends BaseTest {
     public void returnMethodInvocationsLocalIndirect(){
         CKClassResult ckClass = report.get("MethodInvocation.Complex1");
         HashMap<String, Set<String>> invocations6 = new HashMap<>();
-        invocations6.put(qualifier + "m6/0", Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"));
-        invocations6.put(qualifier + "m4/2[java.lang.String,int]", Sets.newHashSet(qualifier + "m2/1[int]"));
-        invocations6.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + "m3/1[java.lang.String]"));
+        invocations6.put(qualifier + "m6/0", Sets.newHashSet(qualifier + javaLang2));
+        invocations6.put(qualifier + javaLang2, Sets.newHashSet(qualifier + "m2/1[int]"));
+        invocations6.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + javaLang1));
         CKMethodResult m6 = ckClass.getMethod("m6/0").get();
         assertEquals(invocations6, m6.getMethodInvocationsIndirectLocal());
     }
@@ -230,9 +231,9 @@ public class MethodInvocationsTest extends BaseTest {
     public void lambdaMethodInvocationsLocalIndirect(){
         CKClassResult ckClass = report.get("MethodInvocation.Complex1");
         HashMap<String, Set<String>> invocations8 = new HashMap<>();
-        invocations8.put(qualifier + "m8/0", Sets.newHashSet(qualifier + "m4/2[java.lang.String,int]"));
-        invocations8.put(qualifier + "m4/2[java.lang.String,int]", Sets.newHashSet(qualifier + "m2/1[int]"));
-        invocations8.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + "m3/1[java.lang.String]"));
+        invocations8.put(qualifier + "m8/0", Sets.newHashSet(qualifier + javaLang2));
+        invocations8.put(qualifier + javaLang2, Sets.newHashSet(qualifier + "m2/1[int]"));
+        invocations8.put(qualifier + "m2/1[int]", Sets.newHashSet(qualifier + javaLang1));
         CKMethodResult m8 = ckClass.getMethod("m8/0").get();
         assertEquals(invocations8, m8.getMethodInvocationsIndirectLocal());
     }
