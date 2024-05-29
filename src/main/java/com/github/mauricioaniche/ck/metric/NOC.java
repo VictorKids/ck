@@ -3,9 +3,7 @@ package com.github.mauricioaniche.ck.metric;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -33,7 +31,6 @@ public class NOC implements CKASTVisitor, ClassLevelMetric{
 			}
 		} else {
 			this.name = node.getName().getFullyQualifiedName();
-			Type type = node.getSuperclassType();
 			
 			SimpleType castedFatherType = null;
 			
