@@ -1,7 +1,10 @@
 package com.github.mauricioaniche.ck.metric;
 
+import java.util.Deque;
+
 import com.github.mauricioaniche.ck.CKClassResult;
 import com.github.mauricioaniche.ck.CKMethodResult;
+
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.Stack;
@@ -10,9 +13,9 @@ public class NumberOfMaxNestedBlock implements CKASTVisitor, ClassLevelMetric, M
 
 	private int current = 0;
 	private int max = 0;
-	private Stack<ASTNode> currentNode = new Stack<>();
-	private Stack<Boolean> blocks = new Stack<>();
-	private Stack<Boolean> nodes = new Stack<>();
+	private Deque<ASTNode> currentNode = new Deque<>();
+	private Deque<Boolean> blocks = new Deque<>();
+	private Deque<Boolean> nodes = new Deque<>();
 
 	@Override
 	public void visit(Block node) {

@@ -1,9 +1,12 @@
 package com.github.mauricioaniche.ck;
 
+import java.util.Deque;
+
 import com.github.mauricioaniche.ck.metric.CKASTVisitor;
 import com.github.mauricioaniche.ck.metric.ClassLevelMetric;
 import com.github.mauricioaniche.ck.metric.MethodLevelMetric;
 import com.github.mauricioaniche.ck.util.JDTUtils;
+
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.HashSet;
@@ -28,14 +31,14 @@ public class CKVisitor extends ASTVisitor {
 	class ClassInTheStack {
 		CKClassResult result;
 		List<ClassLevelMetric> classLevelMetrics;
-		Stack<MethodInTheStack> methods;
+		Deque<MethodInTheStack> methods;
 
 
 		ClassInTheStack() {
 			methods = new Stack<>();
 		}
 	}
-	private Stack<ClassInTheStack> classes;
+	private Deque<ClassInTheStack> classes;
 
 	private Set<CKClassResult> collectedClasses;
 

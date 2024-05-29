@@ -1,9 +1,11 @@
 package com.github.mauricioaniche.ck.util;
 
 import com.github.mauricioaniche.ck.metric.RunAfter;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -13,7 +15,7 @@ public class DependencySorter {
 
     public <T> List<Class<? extends T>> sort(List<Class<? extends T>> toSort) {
         // the stack will contain the final list of vertexes
-        Stack<Integer> sortedStack = new Stack<>();
+        Deque<Integer> sortedStack = new Deque<>();
 
         // first step, we build a simple adjacent matrix
         boolean[][] adjacencyMatrix = deriveAdjacencyMatrix(toSort);
@@ -30,7 +32,7 @@ public class DependencySorter {
         return sortedStack.stream().map(i -> toSort.get(i)).collect(Collectors.toList());
     }
 
-    private void topologicalSort(int v, boolean[] visited, boolean[][] adjacencyMatrix, Stack<Integer> sortedStack) {
+    private void topologicalSort(int v, boolean[] visited, boolean[][] adjacencyMatrix, Deque<Integer> sortedStack) {
         // Mark the current node as visited
         visited[v] = true;
 
