@@ -22,6 +22,7 @@ public class CK {
 
 	private final int maxAtOnce;
 	private final boolean useJars;
+	private final boolean test;
 	
 	private static Logger log = Logger.getLogger(CK.class);
 
